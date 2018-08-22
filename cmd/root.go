@@ -155,3 +155,19 @@ func getAllClusters() ([]*daemon.Cluster, error) {
 
 	return clusters, nil
 }
+
+func getCluster(clusterID string) (*daemon.Cluster, error) {
+	var respData daemon.ClusterJSON
+	path := fmt.Sprintf("/cluster/%s", clusterID)
+	err := serverRestCall("GET", path, nil, &respData, psAllFlag)
+	if err != nil {
+		return nil, err
+	}
+
+	cluster, err := daemon.UnjsonifyCluster(&respData)
+	if err != nil {
+		return nil, err
+	}
+
+	return cluster, nil
+}
