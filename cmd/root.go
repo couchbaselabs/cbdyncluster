@@ -135,3 +135,23 @@ func serverRestCall(method, path string, data interface{}, dataOut interface{}, 
 
 	return nil
 }
+
+func getAllClusters() ([]*daemon.Cluster, error) {
+	var respData daemon.GetClustersJSON
+	err := serverRestCall("GET", "/clusters", nil, &respData, psAllFlag)
+	if err != nil {
+		return nil, err
+	}
+
+	var clusters []*daemon.Cluster
+	for _, jsonCluster := range respData {
+		cluster, err := daemon.UnjsonifyCluster(&jsonCluster)
+		if err != nil {
+			return nil, err
+		}
+
+		clusters = append(clusters, cluster)
+	}
+
+	return clusters, nil
+}

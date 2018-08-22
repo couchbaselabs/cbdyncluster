@@ -2,11 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"time"
 
-	"github.com/couchbaselabs/cbdynclusterd/daemon"
 	"github.com/spf13/cobra"
 )
 
@@ -15,26 +13,14 @@ var psAllFlag bool
 var psCmd = &cobra.Command{
 	Use:   "ps",
 	Short: "Lists all clusters",
-	//Long:  `Allocates a new cluster`,
+	//Long:  `Lists all clusters`,
 	Run: func(cmd *cobra.Command, args []string) {
 		checkConfigInitialized()
 
-		var respData daemon.GetClustersJSON
-		err := serverRestCall("GET", "/clusters", nil, &respData, psAllFlag)
+		clusters, err := getAllClusters()
 		if err != nil {
-			log.Printf("Failed to list clusters: %s\n", err)
+			fmt.Printf("Failed to list all clusters: %s\n", err)
 			os.Exit(1)
-		}
-
-		var clusters []*daemon.Cluster
-		for _, jsonCluster := range respData {
-			cluster, err := daemon.UnjsonifyCluster(&jsonCluster)
-			if err != nil {
-				fmt.Printf("Failed to parse list clusters response: %s", err)
-				os.Exit(1)
-			}
-
-			clusters = append(clusters, cluster)
 		}
 
 		fmt.Printf("Clusters:\n")
