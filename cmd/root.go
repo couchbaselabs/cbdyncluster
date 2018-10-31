@@ -65,17 +65,22 @@ func initConfig() {
 	viper.AutomaticEnv()
 	viper.ReadInConfig()
 
-	cfgServer := viper.GetString("server")
-	if cfgServer != "" {
-		serverFlag = cfgServer
-	}
-
-	cfgUser := viper.GetString("userEmail")
-	if cfgUser != "" {
-		userFlag = cfgUser
-	}
+	serverFlag = getArg("server")
+	userFlag   = getArg("userEmail")
 }
 
+func getArg(arg string) string {
+	var val string
+	if rootCmd.PersistentFlags().Changed(arg) {
+		// read from commandline option
+		val, _ = rootCmd.PersistentFlags().GetString(arg)
+	} else {
+		// read from config
+		val = viper.GetString(arg)
+	}
+
+	return val
+}
 func checkConfigInitialized() {
 	if serverFlag == "" || userFlag == "" {
 		fmt.Println("You must configure cbdyncluster before you can use it.")
