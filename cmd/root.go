@@ -11,9 +11,10 @@ import (
 	"path"
 
 	"github.com/couchbaselabs/cbdynclusterd/daemon"
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/golang/glog"
 )
 
 var cfgFile string
@@ -45,7 +46,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cbdyncluster.toml)")
 	rootCmd.PersistentFlags().StringVar(&serverFlag, "server", "dyncluster.hq.couchbase.com", "the server to operate on")
-	rootCmd.PersistentFlags().StringVar(&userFlag, "user", "", "the user to operate as (as a @couchbase email)")
+	rootCmd.PersistentFlags().StringVar(&userFlag, "auth", "", "the user to operate as (as a @couchbase email)")
 }
 
 func initConfig() {
@@ -66,7 +67,7 @@ func initConfig() {
 	viper.ReadInConfig()
 
 	serverFlag = getArg("server")
-	userFlag   = getArg("userEmail")
+	userFlag   = getArg("auth")
 }
 
 func getArg(arg string) string {
@@ -116,6 +117,7 @@ func serverRestCall(method, path string, data interface{}, dataOut interface{}, 
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
+		glog.Errorf("Rest call error:%s", err)
 		return err
 	}
 
@@ -124,9 +126,11 @@ func serverRestCall(method, path string, data interface{}, dataOut interface{}, 
 		jsonDec := json.NewDecoder(resp.Body)
 		err = jsonDec.Decode(&jsonError)
 		if err != nil {
+			glog.Errorf("Error on json decode of Rest call response:%s", err)
 			return err
 		}
 
+		glog.Errorf("Error on json decode of Rest call response:%s", jsonError.Error.Message)
 		return errors.New(jsonError.Error.Message)
 	}
 
@@ -134,6 +138,7 @@ func serverRestCall(method, path string, data interface{}, dataOut interface{}, 
 		jsonDec := json.NewDecoder(resp.Body)
 		err = jsonDec.Decode(dataOut)
 		if err != nil {
+			glog.Errorf("Error on json decode of Rest call response body:%s", err)
 			return err
 		}
 	}
@@ -175,4 +180,33 @@ func getCluster(clusterID string) (*daemon.Cluster, error) {
 	}
 
 	return cluster, nil
+}
+
+func getDockerHost() (string, error) {
+	var respData daemon.DockerHostJSON
+	path := fmt.Sprintf("/docker-host")
+	err := serverRestCall("GET", path, nil, &respData, false)
+	if err != nil {
+		return "", err
+	}
+	dockerHost, err := daemon.UnjsonifyDockerHost(&respData)
+	if err != nil {
+		return "", err
+	}
+
+	return dockerHost, err
+}
+
+func getDaemonVersion() (string, error) {
+	var respData daemon.VersionJSON
+	path := fmt.Sprintf("/version")
+	err := serverRestCall("GET", path, nil, &respData, false)
+	if err != nil {
+		return "", err
+	}
+	version, err := daemon.UnjsonifyVersion(&respData)
+	if err != nil {
+		return "", err
+	}
+	return version, err
 }
