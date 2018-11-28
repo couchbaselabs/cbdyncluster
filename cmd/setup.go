@@ -24,12 +24,14 @@ var setupCmd = &cobra.Command{
 		var nodes []string
 		var err error
 		var storageMode, bucketOption, userOption string
+		var useHostname bool
 		var ramQuota int
 		if nodes, err = flags.GetStringArray("node"); err != nil { printAndExit("Invalid node") }
 		if storageMode, err = cmd.Flags().GetString("storage-mode"); err != nil { printAndExit("Invalid storage-mode")}
 		if ramQuota, err = cmd.Flags().GetInt("ram-quota"); err != nil { printAndExit("Invalid ram-quota")}
 		if bucketOption, err = cmd.Flags().GetString("bucket"); err != nil { printAndExit("Invalid bucket option")}
 		if userOption, err = cmd.Flags().GetString("user"); err != nil { printAndExit("Invalid user option")}
+		if useHostname, err = cmd.Flags().GetBool("use-hostname"); err != nil { printAndExit("Invalid use-hostname option")}
 
 
 
@@ -39,6 +41,7 @@ var setupCmd = &cobra.Command{
 		}
 		reqData.RamQuota = ramQuota
 		reqData.StorageMode = storageMode
+		reqData.UseHostname = useHostname
 		reqData.Bucket = parseBucketOption(bucketOption)
 		reqData.User   = parseUserOption(userOption)
 
@@ -109,4 +112,5 @@ func init() {
 	setupCmd.Flags().Int("ram-quota", 600, "ram quota")
 	setupCmd.Flags().String("bucket", "", "Create a bucket <bucket-name>[:<bucket-type, memcached|couchbase|ephemeral[:<bucket password>]]. if only bucket name is given, couchbase bucket will be created. if server is equal or after 5.0, bucket password will be ignored")
 	setupCmd.Flags().String("user", "", "Create a user <user-name>:<user-password>[:<user-role>]. creates a user. default role is admin")
+	setupCmd.Flags().Bool("use-hostname", false, "Set true to setup a cluster using hostname. default is false")
 }
