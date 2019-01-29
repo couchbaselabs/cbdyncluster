@@ -1,3 +1,6 @@
+/**
+ * Copyright 2019, Couchbase Inc.
+ */
 package main
 
 import (
