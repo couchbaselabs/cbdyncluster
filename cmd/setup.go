@@ -4,21 +4,22 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/couchbaselabs/cbdynclusterd/daemon"
-	"github.com/spf13/cobra"
 	"strings"
+
+	"github.com/couchbaselabs/cbdynclusterd/daemon"
 	"github.com/couchbaselabs/cbdynclusterd/helper"
+	"github.com/spf13/cobra"
 )
 
 var setupCmd = &cobra.Command{
 	Use:   "setup <cluster ID>",
 	Short: "Setup a cluster",
 	Long:  "Setup a cluster using cluster ID",
-	Args: cobra.MinimumNArgs(1),
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		checkConfigInitialized()
 
-		path := "/cluster/"+args[0]+"/setup"
+		path := "/cluster/" + args[0] + "/setup"
 
 		flags := cmd.Flags()
 		var nodes []string
@@ -26,14 +27,24 @@ var setupCmd = &cobra.Command{
 		var storageMode, bucketOption, userOption string
 		var useHostname bool
 		var ramQuota int
-		if nodes, err = flags.GetStringArray("node"); err != nil { printAndExit("Invalid node") }
-		if storageMode, err = cmd.Flags().GetString("storage-mode"); err != nil { printAndExit("Invalid storage-mode")}
-		if ramQuota, err = cmd.Flags().GetInt("ram-quota"); err != nil { printAndExit("Invalid ram-quota")}
-		if bucketOption, err = cmd.Flags().GetString("bucket"); err != nil { printAndExit("Invalid bucket option")}
-		if userOption, err = cmd.Flags().GetString("user"); err != nil { printAndExit("Invalid user option")}
-		if useHostname, err = cmd.Flags().GetBool("use-hostname"); err != nil { printAndExit("Invalid use-hostname option")}
-
-
+		if nodes, err = flags.GetStringArray("node"); err != nil {
+			printAndExit("Invalid node")
+		}
+		if storageMode, err = cmd.Flags().GetString("storage-mode"); err != nil {
+			printAndExit("Invalid storage-mode")
+		}
+		if ramQuota, err = cmd.Flags().GetInt("ram-quota"); err != nil {
+			printAndExit("Invalid ram-quota")
+		}
+		if bucketOption, err = cmd.Flags().GetString("bucket"); err != nil {
+			printAndExit("Invalid bucket option")
+		}
+		if userOption, err = cmd.Flags().GetString("user"); err != nil {
+			printAndExit("Invalid user option")
+		}
+		if useHostname, err = cmd.Flags().GetBool("use-hostname"); err != nil {
+			printAndExit("Invalid use-hostname option")
+		}
 
 		var reqData daemon.CreateClusterSetupJSON
 		for i := 0; i < len(nodes); i++ {
@@ -43,7 +54,7 @@ var setupCmd = &cobra.Command{
 		reqData.StorageMode = storageMode
 		reqData.UseHostname = useHostname
 		reqData.Bucket = parseBucketOption(bucketOption)
-		reqData.User   = parseUserOption(userOption)
+		reqData.User = parseUserOption(userOption)
 
 		var respData daemon.ClusterJSON
 		err = serverRestCall("POST", path, reqData, &respData, false)
@@ -71,10 +82,10 @@ func parseUserOption(opt string) *helper.UserOption {
 		roles = strings.Split(parsed[2], ",")
 	}
 
-	return &helper.UserOption {
-		Name: userName,
+	return &helper.UserOption{
+		Name:     userName,
 		Password: userPassword,
-		Roles: &roles,
+		Roles:    &roles,
 	}
 
 }
@@ -92,9 +103,9 @@ func parseBucketOption(opt string) *helper.BucketOption {
 		bucketPassword = parsed[2]
 	}
 
-	return &helper.BucketOption {
-		Name: bucketName,
-		Type: bucketType,
+	return &helper.BucketOption{
+		Name:     bucketName,
+		Type:     bucketType,
 		Password: bucketPassword,
 	}
 }

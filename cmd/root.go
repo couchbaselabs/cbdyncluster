@@ -11,10 +11,10 @@ import (
 	"path"
 
 	"github.com/couchbaselabs/cbdynclusterd/daemon"
+	"github.com/golang/glog"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/golang/glog"
 )
 
 var cfgFile string
@@ -67,7 +67,7 @@ func initConfig() {
 	viper.ReadInConfig()
 
 	serverFlag = getArg("server")
-	userFlag   = getArg("auth")
+	userFlag = getArg("auth")
 }
 
 func getArg(arg string) string {

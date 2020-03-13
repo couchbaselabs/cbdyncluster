@@ -11,7 +11,7 @@ import (
 var ipsCmd = &cobra.Command{
 	Use:   "ips [cluster_id]",
 	Short: "Fetches the IPs for a cluster",
-	Args: cobra.MinimumNArgs(1),
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		checkConfigInitialized()
 

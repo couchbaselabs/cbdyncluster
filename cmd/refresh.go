@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+
 	"github.com/couchbaselabs/cbdynclusterd/daemon"
 	"github.com/spf13/cobra"
 )
@@ -10,8 +11,8 @@ import (
 var refreshCmd = &cobra.Command{
 	Use:   "refresh <cluster_id> <timeout>",
 	Short: "Updates timeout of the cluster",
-	Long: "Timeout is in duration format of Golang which is possibly signed sequence of decimal numbers, each with optional fraction and a unit suffix, such as \"300s\", \"+1.5h\" or \"2h25m\"",
-	Args: cobra.MinimumNArgs(2),
+	Long:  "Timeout is in duration format of Golang which is possibly signed sequence of decimal numbers, each with optional fraction and a unit suffix, such as \"300s\", \"+1.5h\" or \"2h25m\"",
+	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		checkConfigInitialized()
 
