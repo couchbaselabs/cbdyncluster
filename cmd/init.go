@@ -53,7 +53,7 @@ tracking purposes.`,
 		if userStr != "" {
 			userFlag = userStr
 		}
-		tmap.Set("userEmail", userFlag)
+		tmap.Set("auth", userFlag)
 
 		s := tmap.String()
 		b := []byte(s)
