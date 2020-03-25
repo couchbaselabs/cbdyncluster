@@ -27,7 +27,7 @@ var setupCmd = &cobra.Command{
 		var storageMode, bucketOption, userOption string
 		var useHostname bool
 		var ramQuota int
-		var useDevPreview bool
+		var enableDevPreview bool
 		if nodes, err = flags.GetStringArray("node"); err != nil {
 			printAndExit("Invalid node")
 		}
@@ -46,8 +46,8 @@ var setupCmd = &cobra.Command{
 		if useHostname, err = cmd.Flags().GetBool("use-hostname"); err != nil {
 			printAndExit("Invalid use-hostname option")
 		}
-		if useDevPreview, err = cmd.Flags().GetBool("developer-preview"); err != nil {
-			printAndExit("Invalid developer-preview option")
+		if enableDevPreview, err = cmd.Flags().GetBool("enable-developer-preview"); err != nil {
+			printAndExit("Invalid enable-developer-preview option")
 		}
 
 		var reqData daemon.CreateClusterSetupJSON
@@ -59,7 +59,7 @@ var setupCmd = &cobra.Command{
 		reqData.UseHostname = useHostname
 		reqData.Bucket = parseBucketOption(bucketOption)
 		reqData.User = parseUserOption(userOption)
-		reqData.UseDeveloperPreview = useDevPreview
+		reqData.UseDeveloperPreview = enableDevPreview
 
 		var respData daemon.ClusterJSON
 		err = serverRestCall("POST", path, reqData, &respData, false)
@@ -129,5 +129,5 @@ func init() {
 	setupCmd.Flags().String("bucket", "", "Create a bucket <bucket-name>[:<bucket-type, memcached|couchbase|ephemeral[:<bucket password>]]. if only bucket name is given, couchbase bucket will be created. if server is equal or after 5.0, bucket password will be ignored")
 	setupCmd.Flags().String("user", "", "Create a user <user-name>:<user-password>[:<user-role>]. creates a user. default role is admin")
 	setupCmd.Flags().Bool("use-hostname", false, "Set true to setup a cluster using hostname. default is false")
-	setupCmd.Flags().Bool("developer-preview", false, "Set true to enable developer preview. default is false")
+	setupCmd.Flags().Bool("enable-developer-preview", false, "Set true to enable developer preview. default is false")
 }
