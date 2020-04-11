@@ -122,6 +122,10 @@ func serverRestCall(method, path string, data interface{}, dataOut interface{}, 
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		if resp.StatusCode == 404 {
+			// We're not going to be able to decode this
+			return fmt.Errorf("endpoint %s does not exist", path)
+		}
 		var jsonError daemon.ErrorJSON
 		jsonDec := json.NewDecoder(resp.Body)
 		err = jsonDec.Decode(&jsonError)
