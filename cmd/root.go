@@ -134,7 +134,7 @@ func serverRestCall(method, path string, data interface{}, dataOut interface{}, 
 			return err
 		}
 
-		glog.Errorf("Error on json decode of Rest call response:%s", jsonError.Error.Message)
+		glog.Errorf("Error occurred executing command on cbdynclusterd: %s", jsonError.Error.Message)
 		return errors.New(jsonError.Error.Message)
 	}
 
