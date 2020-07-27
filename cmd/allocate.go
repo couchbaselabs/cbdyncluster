@@ -18,9 +18,11 @@ var allocateCmd = &cobra.Command{
 		isSimpleInvoke := false
 		isSimpleInvoke = isSimpleInvoke || cmd.Flags().Changed("num-nodes")
 		isSimpleInvoke = isSimpleInvoke || cmd.Flags().Changed("server-version")
+		isSimpleInvoke = isSimpleInvoke || cmd.Flags().Changed("use-ce")
 
 		numNodes, _ := cmd.Flags().GetInt("num-nodes")
 		serverVersion, _ := cmd.Flags().GetString("server-version")
+		useCE, _ := cmd.Flags().GetBool("use-ce")
 
 		if numNodes < 0 || numNodes > 24 {
 			fmt.Printf("Must allocate between 1 and 24 nodes\n")
@@ -30,7 +32,8 @@ var allocateCmd = &cobra.Command{
 		var reqData daemon.CreateClusterJSON
 		for i := 0; i < numNodes; i++ {
 			reqData.Nodes = append(reqData.Nodes, daemon.CreateClusterNodeJSON{
-				ServerVersion: serverVersion,
+				ServerVersion:       serverVersion,
+				UseCommunityEdition: useCE,
 			})
 		}
 
@@ -50,4 +53,5 @@ func init() {
 
 	allocateCmd.Flags().Int("num-nodes", 3, "The number of nodes to initialize")
 	allocateCmd.Flags().String("server-version", "5.5.0", "The server version to use when allocating the nodes.")
+	allocateCmd.Flags().Bool("use-ce", false, "Use the Community edition (CE) of the Couchbase Server.")
 }

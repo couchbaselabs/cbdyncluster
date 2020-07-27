@@ -16,9 +16,11 @@ var buildImageCmd = &cobra.Command{
 		checkConfigInitialized()
 
 		serverVersion, _ := cmd.Flags().GetString("server-version")
+		useCE, _ := cmd.Flags().GetBool("use-ce")
 
 		reqData := daemon.BuildImageJSON{
 			ServerVersion: serverVersion,
+			UseCommunityEdition: useCE,
 		}
 
 		var respData daemon.BuildImageResponseJSON
@@ -36,4 +38,5 @@ func init() {
 	rootCmd.AddCommand(buildImageCmd)
 
 	buildImageCmd.Flags().String("server-version", "5.5.0", "The server version to use when allocating the nodes.")
+	buildImageCmd.Flags().Bool("use-ce", false, "Use the Community edition (CE) of the Couchbase Server.")
 }
