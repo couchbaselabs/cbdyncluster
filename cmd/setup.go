@@ -97,7 +97,7 @@ func parseUserOption(opt string) *helper.UserOption {
 
 func parseBucketOption(opt string) *helper.BucketOption {
 	parsed := strings.Split(opt, ":")
-	var bucketName, bucketType, bucketPassword string
+	var bucketName, bucketType, bucketPassword, storageBackend string
 	if len(parsed) > 0 {
 		bucketName = parsed[0]
 	}
@@ -107,16 +107,22 @@ func parseBucketOption(opt string) *helper.BucketOption {
 	if len(parsed) > 2 {
 		bucketPassword = parsed[2]
 	}
+	if len(parsed) > 3 {
+		storageBackend = parsed[3]
+	} else {
+		storageBackend = "couchstore"
+	}
 
 	return &helper.BucketOption{
-		Name:     bucketName,
-		Type:     bucketType,
-		Password: bucketPassword,
+		Name:           bucketName,
+		Type:           bucketType,
+		Password:       bucketPassword,
+		StorageBackend: storageBackend,
 	}
 }
 
 func printAndExit(msg string) {
-	fmt.Printf(msg)
+	fmt.Println(msg)
 	os.Exit(1)
 }
 
@@ -126,7 +132,7 @@ func init() {
 	setupCmd.Flags().StringArray("node", nil, "Comma separated services.")
 	setupCmd.Flags().String("storage-mode", "", "set storage mode")
 	setupCmd.Flags().Int("ram-quota", 600, "ram quota")
-	setupCmd.Flags().String("bucket", "", "Create a bucket <bucket-name>[:<bucket-type, memcached|couchbase|ephemeral[:<bucket password>]]. if only bucket name is given, couchbase bucket will be created. if server is equal or after 5.0, bucket password will be ignored")
+	setupCmd.Flags().String("bucket", "", "Create a bucket <bucket-name>[:<bucket-type, memcached|couchbase|ephemeral[:<bucket password>]][:<storage backend, couchstore|magma>]. if only bucket name is given, couchbase bucket will be created. if server is equal or after 5.0, bucket password will be ignored. Storage backend defaults to couchstore")
 	setupCmd.Flags().String("user", "", "Create a user <user-name>:<user-password>[:<user-role>]. creates a user. default role is admin")
 	setupCmd.Flags().Bool("use-hostname", false, "Set true to setup a cluster using hostname. default is false")
 	setupCmd.Flags().Bool("enable-developer-preview", false, "Set true to enable developer preview. default is false")
