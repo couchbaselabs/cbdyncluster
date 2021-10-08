@@ -35,10 +35,12 @@ var certAuthCmd = &cobra.Command{
 		if outOption == "" {
 			printAndExit("No out-dir provided")
 		}
+		numRootsOption, _ := flags.GetInt("num-roots")
 
 		var reqData daemon.SetupClientCertAuthJSON
 		reqData.UserName = userOption
 		reqData.UserEmail = emailOption
+		reqData.NumRoots = numRootsOption
 
 		var respData daemon.CertAuthResultJSON
 
@@ -82,4 +84,5 @@ func init() {
 	certAuthCmd.Flags().String("user", "", "The username to create a cert for")
 	certAuthCmd.Flags().String("email", "", "The user email to create a cert for")
 	certAuthCmd.Flags().String("out-dir", ".", "The directory to write certs to")
+	certAuthCmd.Flags().Int("num-roots", 1, "Number of root CAs")
 }
