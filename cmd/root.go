@@ -10,6 +10,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/couchbaselabs/cbdynclusterd/cluster"
 	"github.com/couchbaselabs/cbdynclusterd/daemon"
 	"github.com/golang/glog"
 	"github.com/mitchellh/go-homedir"
@@ -150,14 +151,14 @@ func serverRestCall(method, path string, data interface{}, dataOut interface{}, 
 	return nil
 }
 
-func getAllClusters() ([]*daemon.Cluster, error) {
+func getAllClusters() ([]*cluster.Cluster, error) {
 	var respData daemon.GetClustersJSON
 	err := serverRestCall("GET", "/clusters", nil, &respData, psAllFlag)
 	if err != nil {
 		return nil, err
 	}
 
-	var clusters []*daemon.Cluster
+	var clusters []*cluster.Cluster
 	for _, jsonCluster := range respData {
 		cluster, err := daemon.UnjsonifyCluster(&jsonCluster)
 		if err != nil {
@@ -170,7 +171,7 @@ func getAllClusters() ([]*daemon.Cluster, error) {
 	return clusters, nil
 }
 
-func getCluster(clusterID string) (*daemon.Cluster, error) {
+func getCluster(clusterID string) (*cluster.Cluster, error) {
 	var respData daemon.ClusterJSON
 	path := fmt.Sprintf("/cluster/%s", clusterID)
 	err := serverRestCall("GET", path, nil, &respData, psAllFlag)
