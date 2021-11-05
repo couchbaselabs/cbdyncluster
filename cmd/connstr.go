@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -18,23 +17,13 @@ var connstrCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		checkConfigInitialized()
 
-		cluster, err := getCluster(args[0])
+		connStr, err := getConnString(args[0], connstrSslFlag)
+
 		if err != nil {
-			fmt.Printf("Failed to list all clusters: %s\n", err)
+			fmt.Printf("Failed to get connection string: %s\n", err)
 			os.Exit(1)
 		}
 
-		var addresses []string
-		for _, node := range cluster.Nodes {
-			addresses = append(addresses, node.IPv4Address)
-		}
-
-		scheme := "couchbase"
-		if connstrSslFlag {
-			scheme = "couchbases"
-		}
-
-		connStr := fmt.Sprintf("%s://%s", scheme, strings.Join(addresses, ","))
 		fmt.Printf("%s\n", connStr)
 	},
 }
