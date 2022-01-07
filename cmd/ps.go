@@ -27,7 +27,7 @@ var psCmd = &cobra.Command{
 		for _, cluster := range clusters {
 			fmt.Printf("  %s [Owner: %s, Creator: %s, Timeout: %s]\n", cluster.ID, cluster.Owner, cluster.Creator, cluster.Timeout.Sub(time.Now()).Round(time.Second))
 			for _, node := range cluster.Nodes {
-				fmt.Printf("    %-16s  %-20s %-10s %-20s %-15s\n", node.ContainerID, node.Name, node.InitialServerVersion, node.IPv4Address, node.ContainerName[1:])
+				fmt.Printf("    %-16s  %-20s %-10s %-20s %-15s\n", node.ContainerID, node.Name, node.InitialServerVersion, node.IPv4Address, node.ContainerName)
 			}
 		}
 	},
