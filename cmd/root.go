@@ -216,10 +216,10 @@ func getDaemonVersion() (string, error) {
 	return version, err
 }
 
-func getConnString(clusterID string, useSSL bool) (string, error) {
+func getConnString(clusterID string, useSSL, useSrv bool) (string, error) {
 	var respData daemon.ConnStringResponseJSON
 	path := fmt.Sprintf("/cluster/%s/connstr", clusterID)
-	reqData := daemon.ConnStringJSON{UseSSL: useSSL}
+	reqData := daemon.ConnStringJSON{UseSSL: useSSL, UseSrv: useSrv}
 	err := serverRestCall("GET", path, reqData, &respData, false)
 	if err != nil {
 		return "", err

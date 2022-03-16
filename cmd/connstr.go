@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var connstrSslFlag bool
+var connstrSslFlag, connstrSrvFlag bool
 
 var connstrCmd = &cobra.Command{
 	Use:   "connstr [cluster_id]",
@@ -17,7 +17,7 @@ var connstrCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		checkConfigInitialized()
 
-		connStr, err := getConnString(args[0], connstrSslFlag)
+		connStr, err := getConnString(args[0], connstrSslFlag, connstrSrvFlag)
 
 		if err != nil {
 			fmt.Printf("Failed to get connection string: %s\n", err)
@@ -32,4 +32,5 @@ func init() {
 	rootCmd.AddCommand(connstrCmd)
 
 	connstrCmd.Flags().BoolVar(&connstrSslFlag, "ssl", false, "gets the SSL variant of the connection string")
+	connstrCmd.Flags().BoolVar(&connstrSrvFlag, "srv", false, "gets the DNS SRV variant of the connection string (only supported on AWS and Capella)")
 }

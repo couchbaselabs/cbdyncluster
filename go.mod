@@ -3,7 +3,7 @@ module github.com/couchbaselabs/cbdyncluster
 go 1.13
 
 require (
-	github.com/couchbaselabs/cbdynclusterd v1.1.4-0.20220128111308-04058fdbb0dd
+	github.com/couchbaselabs/cbdynclusterd v1.1.4-0.20220317155538-9f35166c195b
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pelletier/go-toml v1.7.0
