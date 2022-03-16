@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"strings"
@@ -27,7 +28,7 @@ var setupCmd = &cobra.Command{
 		var storageMode, bucketOption, userOption string
 		var useHostname bool
 		var ramQuota int
-		var enableDevPreview bool
+		var enableDevPreview, capella bool
 		if nodes, err = flags.GetStringArray("node"); err != nil {
 			printAndExit("Invalid node")
 		}
@@ -49,6 +50,9 @@ var setupCmd = &cobra.Command{
 		if enableDevPreview, err = cmd.Flags().GetBool("enable-developer-preview"); err != nil {
 			printAndExit("Invalid enable-developer-preview option")
 		}
+		if capella, err = cmd.Flags().GetBool("capella"); err != nil {
+			printAndExit("Invalid capella option")
+		}
 
 		var reqData daemon.CreateClusterSetupJSON
 		for i := 0; i < len(nodes); i++ {
@@ -60,6 +64,7 @@ var setupCmd = &cobra.Command{
 		reqData.Bucket = parseBucketOption(bucketOption)
 		reqData.User = parseUserOption(userOption)
 		reqData.UseDeveloperPreview = enableDevPreview
+		reqData.Capella = capella
 
 		var respData daemon.ClusterJSON
 		err = serverRestCall("POST", path, reqData, &respData, false)
@@ -69,6 +74,12 @@ var setupCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		fmt.Printf("%s\n", respData.EntryPoint)
+
+		if capella {
+			if err := writeCert("ca.pem", respData.CACert); err != nil {
+				log.Fatalf("Failed to write CA cert file: %v", err)
+			}
+		}
 	},
 }
 
@@ -136,4 +147,5 @@ func init() {
 	setupCmd.Flags().String("user", "", "Create a user <user-name>:<user-password>[:<user-role>]. creates a user. default role is admin")
 	setupCmd.Flags().Bool("use-hostname", false, "Set true to setup a cluster using hostname. default is false")
 	setupCmd.Flags().Bool("enable-developer-preview", false, "Set true to enable developer preview. default is false")
+	setupCmd.Flags().Bool("capella", false, "Set true to setup a cluster like capella (encryption, non admin user, etc)")
 }
