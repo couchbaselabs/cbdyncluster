@@ -56,8 +56,8 @@ github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7
 github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f/go.mod h1:E3G3o1h8I7cfcXa63jLwjI0eiQQMgzzUDFVpN/nH/eA=
 github.com/couchbaselabs/cbcerthelper v0.0.0-20220203115212-3b5fe2d4c5e2 h1:icJd8gbKK/qoP7wT8/vYXe2Sy8/4DebrsyjeImT6cxo=
 github.com/couchbaselabs/cbcerthelper v0.0.0-20220203115212-3b5fe2d4c5e2/go.mod h1:P+HDRid9bLCl+jwGEinhLZ0FAbzmGTw+o4TZeYIBhCs=
-github.com/couchbaselabs/cbdynclusterd v1.1.4-0.20220601142540-a498cb86cd5b h1:FfSP1siiPeSh4AaAS+aTQ3g3ZG/wLu7QiS32addDH+I=
-github.com/couchbaselabs/cbdynclusterd v1.1.4-0.20220601142540-a498cb86cd5b/go.mod h1:re+qRaNDgdbCNdMYRwceDKsA8BmS3QGfsuMsEHgc8AU=
+github.com/couchbaselabs/cbdynclusterd v1.1.4-0.20220629151512-27a083a13440 h1:kw8MafwOJdDCo7HfMRXOxA61mx16JEYTgoNtICXacGk=
+github.com/couchbaselabs/cbdynclusterd v1.1.4-0.20220629151512-27a083a13440/go.mod h1:QEWh1Sc6AovN3AcVqh1UiOQSpRtmthF4L500bcr5eZ8=
 github.com/cpuguy83/go-md2man v1.0.10/go.mod h1:SmD6nW6nTyfqj6ABTjUi3V3JVMnlJmwcJI5acqYI6dE=
 github.com/cpuguy83/go-md2man/v2 v2.0.0/go.mod h1:maD7wRr/U5Z6m/iR4s+kqSMx2CaBsrgA7czyZG/E6dU=
 github.com/creack/pty v1.1.7/go.mod h1:lj5s0c3V2DBrqTV7llrYr5NG6My20zk30Fl46Y7DoTY=
@@ -292,8 +292,9 @@ golang.org/x/sys v0.0.0-20190221075227-b4e8571b14e0/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20190507160741-ecd444e8653b/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20190626221950-04f50cda93cb/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
-golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 h1:uYVVQ9WP/Ds2ROhcaGPeIdVq0RIXVLwsHlnvJ+cT1So=
 golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20220627191245-f75cf1eec38b h1:2n253B2r0pYSmEV+UNCQoPfU/FiaizQEK5Gu4Bq4JE8=
+golang.org/x/sys v0.0.0-20220627191245-f75cf1eec38b/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.2 h1:tW2bmiBqwgJj/UpqtC8EpXEZVYOwU0yG4iWbprSVAcs=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
