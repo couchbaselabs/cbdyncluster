@@ -29,7 +29,7 @@ var createCloudCmd = &cobra.Command{
 		var singleAZ *bool
 		var image string
 		var overrideToken string
-		var serverVersion string
+		var env string
 		var err error
 		if nodes, err = flags.GetStringArray("node"); err != nil {
 			printAndExit("Invalid node")
@@ -77,8 +77,8 @@ var createCloudCmd = &cobra.Command{
 		if overrideToken, err = flags.GetString("override-token"); err != nil {
 			printAndExit("Invalid override token")
 		}
-		if serverVersion, err = flags.GetString("server-version"); err != nil {
-			printAndExit("Invalid server version")
+		if env, err = flags.GetString("env"); err != nil {
+			printAndExit("Invalid env")
 		}
 
 		if url != "" {
@@ -90,9 +90,7 @@ var createCloudCmd = &cobra.Command{
 				SecretKey:     secretKey,
 				Username:      username,
 				Password:      password,
-				Image:         image,
 				OverrideToken: overrideToken,
-				ServerVersion: serverVersion,
 			}
 		}
 
@@ -102,6 +100,14 @@ var createCloudCmd = &cobra.Command{
 
 		if provider != "" {
 			reqData.Provider = provider
+		}
+
+		if image != "" {
+			reqData.Image = image
+		}
+
+		if env != "" {
+			reqData.EnvName = env
 		}
 
 		reqData.SingleAZ = singleAZ
@@ -133,5 +139,5 @@ func init() {
 	createCloudCmd.Flags().Bool("single-az", true, "Only deploy in one availability zone")
 	createCloudCmd.Flags().String("image", "", "Custom image e.g. couchbase-cloud-server-7.2.0-1409-qe")
 	createCloudCmd.Flags().String("override-token", "", "Override token to use non default deployment options")
-	createCloudCmd.Flags().String("server-version", "", "Custom server version e.g. 7.1.0")
+	createCloudCmd.Flags().String("env", "", "Predefined environment (e.g. prod, stage, dev)")
 }
