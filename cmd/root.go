@@ -226,3 +226,17 @@ func getConnString(clusterID string, useSSL, useSrv bool) (string, error) {
 	}
 	return respData.ConnStr, err
 }
+
+func writeBytes(path string, b []byte) error {
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if _, err := f.Write(b); err != nil {
+		return err
+	}
+
+	return nil
+}

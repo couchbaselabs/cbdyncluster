@@ -76,7 +76,7 @@ var setupCmd = &cobra.Command{
 		fmt.Printf("%s\n", respData.EntryPoint)
 
 		if capella {
-			if err := writeCert("ca.pem", respData.CACert); err != nil {
+			if err := writeBytes("ca.pem", respData.CACert); err != nil {
 				log.Fatalf("Failed to write CA cert file: %v", err)
 			}
 		}
