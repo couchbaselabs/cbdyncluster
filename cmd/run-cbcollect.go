@@ -21,9 +21,15 @@ var cbcollectCmd = &cobra.Command{
 
 		path := "/cluster/" + args[0] + "/cbcollect"
 
+		flags := cmd.Flags()
+		outOption, err := flags.GetString("out-dir")
+		if outOption == "" {
+			printAndExit("No out-dir provided")
+		}
+
 		var respData daemon.CBCollectResultJSON
 
-		err := serverRestCall("GET", path, nil, &respData, false)
+		err = serverRestCall("GET", path, nil, &respData, false)
 
 		if err != nil {
 			fmt.Printf("Failed to run cbcollect-info: %s\n", err)
@@ -31,11 +37,13 @@ var cbcollectCmd = &cobra.Command{
 		}
 
 		for hostname, bytes := range respData.Collections {
-			writeBytes(fmt.Sprintf("cbcollect-%s.zip", hostname), bytes)
+			writeBytes(fmt.Sprintf("%s/cbcollect-%s.zip", outOption, hostname), bytes)
 		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(cbcollectCmd)
+
+	cbcollectCmd.Flags().String("out-dir", ".", "The directory to write cbcollects to")
 }
