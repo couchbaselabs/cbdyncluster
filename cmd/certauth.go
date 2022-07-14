@@ -50,32 +50,18 @@ var certAuthCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if err := writeCert(outOption+"/ca.pem", respData.CACert); err != nil {
+		if err := writeBytes(outOption+"/ca.pem", respData.CACert); err != nil {
 			log.Fatalf("Failed to write CA cert file: %v", err)
 		}
 
-		if err := writeCert(outOption+"/client.pem", respData.ClientCert); err != nil {
+		if err := writeBytes(outOption+"/client.pem", respData.ClientCert); err != nil {
 			log.Fatalf("Failed to write client cert file: %v", err)
 		}
 
-		if err := writeCert(outOption+"/client.key", respData.ClientKey); err != nil {
+		if err := writeBytes(outOption+"/client.key", respData.ClientKey); err != nil {
 			log.Fatalf("Failed to write client key file: %v", err)
 		}
 	},
-}
-
-func writeCert(path string, b []byte) error {
-	f, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	if _, err := f.Write(b); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func init() {
