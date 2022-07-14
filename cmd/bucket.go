@@ -24,7 +24,7 @@ var addBucketCmd = &cobra.Command{
 		flags := cmd.Flags()
 		var err error
 		var name, bucketType, evictionPolicy, storageBackend string
-		var ramQuota, replicaCount int
+		var ramQuota, replicaCount, numVBuckets, width int
 		var useHostname bool
 		if name, err = flags.GetString("name"); err != nil {
 			printAndExit("Invalid name")
@@ -47,6 +47,12 @@ var addBucketCmd = &cobra.Command{
 		if storageBackend, err = flags.GetString("storage-backend"); err != nil {
 			printAndExit("Invalid storage backend")
 		}
+		if numVBuckets, err = flags.GetInt("num-vbuckets"); err != nil {
+			printAndExit("Invalid num-vbuckets")
+		}
+		if width, err = flags.GetInt("width"); err != nil {
+			printAndExit("Invalid width")
+		}
 
 		if storageBackend == "magma" && ramQuota < 256 {
 			printAndExit("Magma buckets require quota >= 256MB")
@@ -61,6 +67,8 @@ var addBucketCmd = &cobra.Command{
 		reqData.ReplicaCount = replicaCount
 		reqData.EvictionPolicy = evictionPolicy
 		reqData.StorageBackend = storageBackend
+		reqData.NumVBuckets = numVBuckets
+		reqData.Width = width
 
 		err = serverRestCall("POST", path, reqData, nil, false)
 
@@ -81,5 +89,7 @@ func init() {
 	addBucketCmd.Flags().Bool("use-hostname", false, "set true to setup a cluster using hostname. default is false")
 	addBucketCmd.Flags().String("eviction-Policy", "", "eviction-Policy for the bucket")
 	addBucketCmd.Flags().String("storage-backend", "couchstore", "storage-backend for the bucket")
+	addBucketCmd.Flags().Int("num-vbuckets", 0, "number of vbuckets (only supported in serverless mode)")
+	addBucketCmd.Flags().Int("width", 0, "width of the bucket (only supported in serverless mode)")
 
 }
