@@ -26,6 +26,7 @@ var allocateCmd = &cobra.Command{
 		platform, _ := cmd.Flags().GetString("platform")
 		OS, _ := cmd.Flags().GetString("os")
 		arch, _ := cmd.Flags().GetString("arch")
+		serverlessMode, _ := cmd.Flags().GetBool("serverless-mode")
 
 		if numNodes < 0 || numNodes > 24 {
 			fmt.Printf("Must allocate between 1 and 24 nodes\n")
@@ -40,6 +41,7 @@ var allocateCmd = &cobra.Command{
 				Platform:            platform,
 				OS:                  OS,
 				Arch:                arch,
+				ServerlessMode:      serverlessMode,
 			})
 		}
 
@@ -63,4 +65,5 @@ func init() {
 	allocateCmd.Flags().String("platform", "docker", "The platform to use when allocating the nodes.")
 	allocateCmd.Flags().String("os", "centos7", "The operating system to use")
 	allocateCmd.Flags().String("arch", "x86_64", "The CPU architecture to use")
+	allocateCmd.Flags().Bool("serverless-mode", false, "Start up the cluster in serverless mode")
 }
