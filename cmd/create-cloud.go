@@ -31,6 +31,8 @@ var createCloudCmd = &cobra.Command{
 		var overrideToken string
 		var env string
 		var err error
+		var server string
+
 		if nodes, err = flags.GetStringArray("node"); err != nil {
 			printAndExit("Invalid node")
 		}
@@ -81,6 +83,10 @@ var createCloudCmd = &cobra.Command{
 			printAndExit("Invalid env")
 		}
 
+		if server, err = flags.GetString("server"); err != nil {
+			printAndExit("Invalid server")
+		}
+
 		if url != "" {
 			reqData.Environment = &store.CloudEnvironment{
 				TenantID:      tenant,
@@ -111,6 +117,7 @@ var createCloudCmd = &cobra.Command{
 		}
 
 		reqData.SingleAZ = singleAZ
+		reqData.Server = server
 
 		var respData daemon.ClusterJSON
 		err = serverRestCall("POST", "/create-cloud", reqData, &respData, false)
@@ -140,4 +147,5 @@ func init() {
 	createCloudCmd.Flags().String("image", "", "Custom image e.g. couchbase-cloud-server-7.2.0-1409-qe")
 	createCloudCmd.Flags().String("override-token", "", "Override token to use non default deployment options")
 	createCloudCmd.Flags().String("env", "", "Predefined environment (e.g. prod, stage, dev)")
+	createCloudCmd.Flags().String("server", "", "Server version to use e.g. 7.1.3, Using an image will override this.")
 }
