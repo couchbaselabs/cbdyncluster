@@ -120,8 +120,6 @@ func parseBucketOption(opt string) *helper.BucketOption {
 	}
 	if len(parsed) > 3 {
 		storageBackend = parsed[3]
-	} else {
-		storageBackend = "couchstore"
 	}
 
 	return &helper.BucketOption{
@@ -143,7 +141,7 @@ func init() {
 	setupCmd.Flags().StringArray("node", nil, "Comma separated services.")
 	setupCmd.Flags().String("storage-mode", "", "set storage mode")
 	setupCmd.Flags().Int("ram-quota", 600, "ram quota")
-	setupCmd.Flags().String("bucket", "", "Create a bucket <bucket-name>[:<bucket-type, memcached|couchbase|ephemeral[:<bucket password>]][:<storage backend, couchstore|magma>]. if only bucket name is given, couchbase bucket will be created. if server is equal or after 5.0, bucket password will be ignored. Storage backend defaults to couchstore")
+	setupCmd.Flags().String("bucket", "", "Create a bucket <bucket-name>[:<bucket-type, memcached|couchbase|ephemeral[:<bucket password>]][:<storage backend, couchstore|magma>]. if only bucket name is given, couchbase bucket will be created. if server is equal or after 5.0, bucket password will be ignored. Storage backend defaults to the server default.")
 	setupCmd.Flags().String("user", "", "Create a user <user-name>:<user-password>[:<user-role>]. creates a user. default role is admin")
 	setupCmd.Flags().Bool("use-hostname", false, "Set true to setup a cluster using hostname. default is false")
 	setupCmd.Flags().Bool("enable-developer-preview", false, "Set true to enable developer preview. default is false")
