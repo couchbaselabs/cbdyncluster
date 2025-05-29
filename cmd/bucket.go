@@ -54,10 +54,6 @@ var addBucketCmd = &cobra.Command{
 			printAndExit("Invalid width")
 		}
 
-		if storageBackend == "magma" && ramQuota < 256 {
-			printAndExit("Magma buckets require quota >= 256MB")
-		}
-
 		var reqData daemon.AddBucketJSON
 
 		reqData.RamQuota = ramQuota
@@ -88,7 +84,7 @@ func init() {
 	addBucketCmd.Flags().Int("replica-count", 1, "number of replicas")
 	addBucketCmd.Flags().Bool("use-hostname", false, "set true to setup a cluster using hostname. default is false")
 	addBucketCmd.Flags().String("eviction-Policy", "", "eviction-Policy for the bucket")
-	addBucketCmd.Flags().String("storage-backend", "couchstore", "storage-backend for the bucket")
+	addBucketCmd.Flags().String("storage-backend", "", "storage-backend for the bucket")
 	addBucketCmd.Flags().Int("num-vbuckets", 0, "number of vbuckets (only supported in serverless mode)")
 	addBucketCmd.Flags().Int("width", 0, "width of the bucket (only supported in serverless mode)")
 
